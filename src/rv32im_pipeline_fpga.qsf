@@ -25,9 +25,11 @@ set_global_assignment -name VHDL_FILE ALU.vhd
 set_global_assignment -name VHDL_FILE extendSigned.vhd
 set_global_assignment -name VHDL_FILE decoderM.vhd
 set_global_assignment -name VHDL_FILE multdiv.vhd
-set_global_assignment -name QIP_FILE mult.qip
-set_global_assignment -name QIP_FILE div.qip
-set_global_assignment -name QIP_FILE divu.qip
+set_global_assignment -name VHDL_FILE mult.vhd
+set_global_assignment -name VHDL_FILE div.vhd
+set_global_assignment -name VHDL_FILE divu.vhd
+set_global_assignment -name VHDL_FILE booth_multiplier_rv32.vhd
+set_global_assignment -name VHDL_FILE non_restoring_divider_rv32.vhd
 set_global_assignment -name VHDL_FILE StoreManager.vhd
 set_global_assignment -name VHDL_FILE reg_EX_MEM.vhd
 set_global_assignment -name VHDL_FILE reg_MEM_WB.vhd

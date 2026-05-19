@@ -26,7 +26,7 @@ async def test_i_type(dut):
 
 
     # Roda ciclos iniciais até os ADD que expõem resultados
-    for _ in range(9):
+    for _ in range(12):
         await step()
 
     # Valor base em x1 = 0x0000F0F0

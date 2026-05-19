@@ -26,7 +26,9 @@ async def test_jal(dut):
     # ====== Executa JAL ======
     pc_before = int(dut.core.pc_if_out.value)  # PC onde JAL está
     await step()
-    pc_after = int(dut.core.pc_if_out.value)   # PC após salto
+    await step()
+    await step()
+    pc_after = int(dut.core.pc_if_out.value)   # PC após salto (após 3 steps)
 
     # Cálculo esperado
     offset = sext(8, 21)  # imediato do JAL
@@ -38,11 +40,14 @@ async def test_jal(dut):
     dut._log.info(f"JAL OK: antes={pc_before:#010x}, depois={pc_after:#010x}")
 
     # ====== Executa ADD que expõe registrador de retorno (x6 = x5) ======
-    # executa ADD saída da ALU com x6 = x5
+    # ADD (add x6,x5,x0 em PC=8) chega ao exmem no step 7 (4 steps após pc_after)
+    await step()
+    await step()
+    await step()
     await step()
     reg_val = int(dut.core.alu_out_idexmem.value)    
 
-    # EXECUTA JALR
+    # EXECUTA JALR: 1 step após o ADD
     await step()
     pc = int(dut.core.pc_if_out.value)
 

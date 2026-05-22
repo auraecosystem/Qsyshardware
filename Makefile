@@ -34,7 +34,7 @@ WDIR := build/ghdl
 # 1) Coleta todos .vhd/.vhdl
 CHECK_SRCS_ALL := $(shell find src -type f \( -name '*.vhd' -o -name '*.vhdl' \) | sort)
 
-# 2) EXCLUI vendors/IPs (ajuste os padrões conforme seu repo)
+# 2) EXCLUI vendors/IPs e arquivos que usam bibliotecas Intel (lpm, altera)
 EXCLUDE_GLOB := \
   src/ROM1PORT/% \
   src/RAM1PORT/% \
@@ -42,7 +42,9 @@ EXCLUDE_GLOB := \
   src/%/ip/% \
   src/%/quartus_ip/% \
   src/**/ip/% \
-  src/**/quartus_ip/%
+  src/**/quartus_ip/% \
+  src/RV32M.vhd \
+  src/mhu.vhd
 
 CHECK_SRCS_ALL := $(filter-out $(EXCLUDE_GLOB),$(CHECK_SRCS_ALL))
 

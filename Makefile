@@ -50,17 +50,25 @@ CHECK_SRCS_ALL := $(filter-out $(EXCLUDE_GLOB),$(CHECK_SRCS_ALL))
 CHECK_SRCS := src/rv32i_ctrl_consts.vhd src/genericRegister.vhd \
               $(filter-out src/rv32i_ctrl_consts.vhd src/genericRegister.vhd,$(CHECK_SRCS_ALL))
 
-# 4) (Opcional) Forçar ordem dos GPIO: filhos → topo (auto-descoberta)
-GPIO_DEC  := $(firstword $(shell find src -type f -iname "gpio*_operation*decoder*.vh*"))
-GPIO_CELL := $(firstword $(shell find src -type f -iname "gpio*_cell*.vh*"))
-GPIO_TOP  := $(firstword $(shell find src -type f -iname "gpio.vh*"))
+# 4) Forçar ordem dos GPIO: dependencias → filhos → topo
+GPIO_TRISTATE := $(firstword $(shell find src -type f -iname "tristate_buffer_1bit.vh*"))
+GPIO_MUX4     := $(firstword $(shell find src -type f -iname "generic_mux_4x1.vh*"))
+GPIO_MUX8     := $(firstword $(shell find src -type f -iname "generic_mux_8x1.vh*"))
+GPIO_SYNC     := $(firstword $(shell find src -type f -iname "generic_synchronizer_1bit.vh*"))
+GPIO_DEC      := $(firstword $(shell find src -type f -iname "gpio*_operation*decoder*.vh*"))
+GPIO_CELL     := $(firstword $(shell find src -type f -iname "gpio*_cell*.vh*"))
+GPIO_TOP      := $(firstword $(shell find src -type f -iname "gpio.vh*"))
+
+# Entidades que GPIO_CELL e GPIO instanciam (devem ser compiladas antes)
+GPIO_FLIPFLOP := src/FlipFlop.vhd
+GPIO_DEPS := $(GPIO_FLIPFLOP) $(GPIO_TRISTATE) $(GPIO_MUX4) $(GPIO_MUX8) $(GPIO_SYNC)
 
 ifeq ($(strip $(GPIO_TOP)),)
   ORDERED_SRCS := $(CHECK_SRCS)
 else
   ORDERED_SRCS := \
-    $(GPIO_DEC) $(GPIO_CELL) \
-    $(filter-out $(GPIO_TOP) $(GPIO_DEC) $(GPIO_CELL),$(CHECK_SRCS)) \
+    $(GPIO_DEPS) $(GPIO_DEC) $(GPIO_CELL) \
+    $(filter-out $(GPIO_TOP) $(GPIO_DEC) $(GPIO_CELL) $(GPIO_DEPS),$(CHECK_SRCS)) \
     $(GPIO_TOP)
 endif
 

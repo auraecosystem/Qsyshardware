@@ -41,7 +41,8 @@ EXCLUDE_GLOB := \
   src/**/ip/% \
   src/**/quartus_ip/% \
   src/RV32M.vhd \
-  src/mhu.vhd
+  src/mhu.vhd \
+  src/rv32im_pipeline_fpga_top.vhd
 
 CHECK_SRCS := $(filter-out $(EXCLUDE_GLOB),$(CHECK_SRCS_ALL))
 

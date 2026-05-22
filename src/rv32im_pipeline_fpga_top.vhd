@@ -52,9 +52,9 @@ begin
       ram_byteena => ram_byteena
     );
 
-  u_instr_rom : entity work.room
+  u_instr_rom : entity work.rom1port
     port map (
-      address => rom_addr(10 downto 2),
+      address => rom_addr(14 downto 2),
       clock   => rom_clk,
       q       => rom_data
     );

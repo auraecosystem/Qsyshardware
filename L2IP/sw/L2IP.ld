@@ -6,7 +6,7 @@ ENTRY(_start)
 MEMORY
 {
   ROM (rx) : ORIGIN = 0x00000000, LENGTH = 0x8000
-  RAM (rwx): ORIGIN = 0x80000000, LENGTH = 0x4000   /* LINK-time RAM address (avoid overlap) */
+  RAM (rwx): ORIGIN = 0x80000000, LENGTH = 0x3FF0   /* LINK-time RAM address (avoid overlap) */
 }
 
 SECTIONS

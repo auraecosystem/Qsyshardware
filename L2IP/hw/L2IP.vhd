@@ -16,6 +16,7 @@ architecture behaviour of L2IP is
 
   -- ======= sinais do PLL ======
   signal pll_clk_if     : std_logic;
+  signal rom_clk        : std_logic;
   signal pll_clk_idexmem: std_logic;
   signal pll_clk_wb     : std_logic;
   signal pll_locked     : std_logic;
@@ -61,7 +62,8 @@ begin
     );
 
   -- O sistema só sai do reset quando o PLL estiver travado
-  sys_reset_n <= FPGA_RESET_N and pll_locked;
+  sys_reset_n <= FPGA_RESET_N;
+  rom_clk <= not pll_clk_idexmem;
 
    -- Decodificação (substituir o bloco antigo)
   periph_id <= ram_addr(30 downto 28);
@@ -119,7 +121,7 @@ begin
   ROM : entity work.rom1port
     port map (
       address => rom_addr(14 downto 2),
-      clock   => pll_clk_if,
+      clock   => rom_clk,
       rden    => rom_rden,
       q       => rom_data
     );

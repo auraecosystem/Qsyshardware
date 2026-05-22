@@ -32,26 +32,26 @@ int main(void)
     val = 1u;
     while (val <= LED_MASK) {
         *LED_ADDR = val & LED_MASK;
-        delay(3000000);
+        delay(30000000);
         val = val * 3u;       /* usa MUL se compilado com rv32im */
     }
 
     /* ---- Fase 2: overflow -> apaga tudo ---- */
     *LED_ADDR = 0x000u;
-    delay(800000);
+    delay(8000000);
 
     /* ---- Fase 3: wave infinito ---- */
     for (;;) {
         /* ida (direita -> esquerda) */
         for (i = 0; i < 10; i++) {
             *LED_ADDR = (1u << i);
-            delay(600000);
+            delay(6000000);
         }
 
         /* volta (esquerda -> direita) */
         for (i = 8; i >= 0; i--) {
             *LED_ADDR = (1u << i);
-            delay(600000);
+            delay(6000000);
         }
     }
 

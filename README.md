@@ -30,7 +30,7 @@ The project evolved from a prior RV32I **multi-cycle** core (3 clock cycles per 
 | Load-use hazard stall + opcode-aware detection | `hazard_detection_unit.vhd` + `bubble_mux.vhd` |
 | Control hazard flush (branch, JAL, JALR) | `reg_IF_ID` + `reg_ID_EX` flush paths |
 | Structural hazard elimination | Harvard architecture (separate ROM / RAM) |
-| RV32M: MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU | `RV32M.vhd` (combinational, 1-cycle) |
+| RV32M: MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU | `multdiv.vhd` (Booth multiplier + non-restoring divider, stall via `muldiv_busy`) |
 | Automated unit + integration tests | Cocotb + GHDL |
 | FPGA synthesis | Quartus (Cyclone V — DE0-CV) |
 
@@ -91,9 +91,7 @@ Avoided by the **Harvard architecture**: instructions are fetched from ROM and d
 
 ### RV32M — multiply and divide
 
-The `RV32M.vhd` module implements all eight M-extension operations (MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU) using combinational Intel/Altera LPM blocks. It runs **in parallel with the ALU** in the EX stage and completes in a single pipeline cycle (`busy = '0'`, `done = '1'` hardwired). The `isMulDiv` control signal from the Control Unit selects the MulDiv result instead of the ALU result before the EX/MEM register. Forwarding for M-extension results follows the same path as any other R-type instruction.
-
-The stall infrastructure for `muldiv_busy` is present in the HDU and in the pipeline register enable signals (`muldiv_stall_n`), allowing a future iterative implementation to be dropped in without architectural changes.
+The `multdiv.vhd` module implements all eight M-extension operations (MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU) using a sequential Booth multiplier and a non-restoring divider. While an operation is in progress, `muldiv_busy` freezes the ID/EX, EX/MEM and MEM/WB registers via `muldiv_stall_n` until the result is ready. An extra stall cycle is inserted when `done` pulses, ensuring `saida_capt` has stabilised before the EX/MEM register captures it. The `isMulDiv` control signal selects the MulDiv result instead of the ALU result. Forwarding for M-extension results follows the same path as any other R-type instruction.
 
 ---
 

@@ -112,7 +112,7 @@ The `multdiv.vhd` module implements all eight M-extension operations (MUL, MULH,
 │   ├── hazard_detection_unit.vhd      # Load-use & muldiv stall detection
 │   ├── reg_ID_EX.vhd                  # ID/EX pipeline register
 │   ├── ALU.vhd                        # Arithmetic/logic unit
-│   ├── RV32M.vhd                      # M-extension: mul/div (combinational)
+│   ├── multdiv.vhd                    # M-extension: Booth mul + non-restoring div (sequential, stall)
 │   ├── forwarding_unit.vhd            # RAW forwarding logic
 │   ├── StoreManager.vhd               # Byte-enable mask for stores
 │   ├── reg_EX_MEM.vhd                 # EX/MEM pipeline register
@@ -142,7 +142,7 @@ The `multdiv.vhd` module implements all eight M-extension operations (MUL, MULH,
 | `hazard_detection_unit.vhd` | Detects load-use hazard; drives PC/IF-ID freeze and bubble injection |
 | `forwarding_unit.vhd` | Detects RAW hazards; drives `forward_A`/`forward_B` mux selectors |
 | `bubble_mux.vhd` | Zeroes side-effect control signals when a NOP bubble is needed |
-| `RV32M.vhd` | Combinational multiply/divide; result selected in EX by `isMulDiv` |
+| `multdiv.vhd` | Sequential multiply/divide (Booth + non-restoring); stall via `muldiv_busy`; result selected in EX by `isMulDiv` |
 | `control_unit.vhd` | Decodes opcode and generates all datapath control signals |
 
 ---

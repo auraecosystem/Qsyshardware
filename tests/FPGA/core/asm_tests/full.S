@@ -755,8 +755,8 @@ jalr_done:
 # 11.3 Load-use hazard: LW seguido imediatamente de instrução dependente
 # ---------------------------------------------------------
     addi x10, x0, 42
-    sw   x10, 0(x0)             # RAM[0] = 42
-    lw   x11, 0(x0)             # x11 = 42 (load)
+    sw   x10, 0(x9)             # RAM[TEMP_SLOT_BASE] = 42
+    lw   x11, 0(x9)             # x11 = 42
     add  x12, x11, x0           # x12 = x11 (load-use hazard: stall de 1 ciclo)
     sw   x12, 0(x5)             # esperado: 42
     addi x5, x5, 4

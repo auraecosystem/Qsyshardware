@@ -6,16 +6,15 @@ static void delay(volatile int n) {
 }
 
 int main(void) {
-    unsigned int val = 255u;
+    volatile unsigned int divisor = 3u;
+    unsigned int val = 243u;
     for (;;) {
-        /* divide por 2 repetidamente ate chegar em 1 */
-        while (val >= 1) {
+        while (val >= 1u) {
             *LED_ADDR = val & LED_MASK;
             delay(6000000);
-            val = val / 2u;  /* usa DIV se compilado com rv32im */
+            val = val / divisor;
         }
-        /* reinicia */
-        val = 255u;
+        val = 243u;
         *LED_ADDR = 0x00u;
         delay(3000000);
     }

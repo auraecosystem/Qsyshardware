@@ -38,6 +38,7 @@ OUT_DATA_MIF := $(BUILD_DIR)/$(OUT_BASENAME)_data.mif
 # Script de boot / utilitários
 HEX2MIF = $(PYTHON) $(TOOLS_DIR)/hex2mif.py
 MIFBOOT = $(PYTHON) $(TOOLS_DIR)/MIFboot.py
+SOF     = $(abspath ../hw/output_files/L2IP.sof)
 
 # ==========================================================
 # Memória (parâmetros configuráveis)
@@ -125,6 +126,9 @@ boot:
 	@rm -f $(BUILD_DIR)/* || true
 	@$(MAKE) build FILE=$(FILE)
 
+	@echo "\n=== Programando FPGA com $(SOF) ==="
+	@quartus_pgm -m JTAG -o "p;$(SOF)"
+	@sleep 2
 	@echo "\n=== Enviando $(OUT_DATA_MIF) para a FPGA (MEM ID = RAM) ==="
 	@quartus_stp -t "$(abspath $(TOOLS_DIR)/atualizaMemoria.tcl)" "$(abspath $(OUT_DATA_MIF))" RAM 1
 

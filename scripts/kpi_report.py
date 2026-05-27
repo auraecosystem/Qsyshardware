@@ -400,7 +400,7 @@ def print_summary(report: dict):
                   f" = {p['time_us']} µs  (CPI≈{p['cpi_efetivo']})")
             print(f"  {div}")
             print(f"  S = {b['time_us']} / {p['time_us']} = {s['S']}  {flag}")
-            if p.get("hazards_estimated"):
+            if False and p.get("hazards_estimated"):
                 print(f"  (hazards estimados — use --load-use-hazards e --branch-taken para valor real)")
         else:
             print(f"  {s.get('note','')}")

@@ -29,7 +29,7 @@ async def test_lui_auipc(dut):
 
     """Testa LUI e AUIPC em casos normais e limites."""
     # deixa a CPU rodar as instruções AUIPC
-    for _ in range(7):
+    for _ in range(10):
         await step()
 
     # ==== CASOS DE AUIPC ====

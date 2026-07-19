@@ -1,0 +1,5 @@
+# Generates the modern autoconf macro engine macros
+autoreconf --install
+
+# Executes your processed script to generate a native Makefile
+./configure
